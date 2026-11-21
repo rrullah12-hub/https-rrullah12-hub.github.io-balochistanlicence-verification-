@@ -275,23 +275,70 @@
       font-weight: 400;
     }
 
-    .search button {
+    .search button,
+    .result-search button {
       height: 52px;
       display: grid;
       place-items: center;
       border: 0;
       background: var(--color-btn-green);
       color: #ffffff;
-      transition: background .15s ease;
+      transition: background .15s ease, opacity .15s ease;
     }
 
-    .search button:hover {
+    .result-search button {
+      height: 50px;
+    }
+
+    .search button:hover:not(:disabled),
+    .result-search button:hover:not(:disabled) {
       background: var(--color-btn-green-hover);
+    }
+
+    .search button:disabled,
+    .result-search button:disabled {
+      opacity: 0.85;
+      cursor: wait;
     }
 
     .search button svg {
       width: 22px;
       height: 22px;
+    }
+
+    /* SEARCHING INDICATOR */
+    .search-loading {
+      display: none;
+      max-width: 500px;
+      margin: 14px auto 0;
+      padding: 10px 14px;
+      border-radius: 7px;
+      background: rgba(17, 24, 32, 0.92);
+      border: 1px solid rgba(197, 155, 60, 0.55);
+      color: #f8fafc;
+      font-size: 14px;
+      font-weight: 600;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .search-loading.show {
+      display: flex;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2.5px solid rgba(255, 255, 255, 0.25);
+      border-top-color: #22c55e;
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
 
     .features-inline {
@@ -564,19 +611,6 @@
       color: #1f2937;
     }
 
-    .result-search button {
-      display: grid;
-      place-items: center;
-      border: 0;
-      background: var(--color-btn-green);
-      color: #ffffff;
-      transition: background .15s ease;
-    }
-
-    .result-search button:hover {
-      background: var(--color-btn-green-hover);
-    }
-
     .result-search svg {
       width: 22px;
       height: 22px;
@@ -713,13 +747,18 @@
         maxlength="30"
         placeholder="Type DL/CNIC Number Without Dash"
       >
-      <button type="submit" aria-label="Search">
+      <button type="submit" id="homeSearchBtn" aria-label="Search">
         <svg viewBox="0 0 24 24" fill="none">
           <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2.5"/>
           <path d="m16.5 16.5 4 4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
         </svg>
       </button>
     </form>
+
+    <div class="search-loading" id="searchLoading" role="status" aria-live="polite">
+      <span class="spinner" aria-hidden="true"></span>
+      <span>Searching record, please wait...</span>
+    </div>
 
     <div class="search-error" id="searchError" role="alert" aria-live="polite"></div>
 
@@ -808,13 +847,18 @@
 
   <form class="result-search" id="resultSearchForm" novalidate>
     <input id="resultInput" type="text" autocomplete="off" maxlength="30" placeholder="Type DL/CNIC Number Without Dash">
-    <button type="submit" aria-label="Search">
+    <button type="submit" id="resultSearchBtn" aria-label="Search">
       <svg viewBox="0 0 24 24" fill="none">
         <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2.5"/>
         <path d="m16.5 16.5 4 4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
       </svg>
     </button>
   </form>
+
+  <div class="search-loading" id="resultSearchLoading" role="status" aria-live="polite">
+    <span class="spinner" aria-hidden="true"></span>
+    <span>Searching record, please wait...</span>
+  </div>
 
   <div class="search-error" id="resultSearchError" role="alert" aria-live="polite"></div>
 
@@ -824,12 +868,17 @@
     </div>
 
     <div class="detail">
+      <label>CNIC Number</label>
+      <strong id="cnicNumber"></strong>
+    </div>
+
+    <div class="detail">
       <label>Name</label>
       <strong id="recordName"></strong>
     </div>
 
     <div class="detail">
-      <label>Father name</label>
+      <label>Father Name</label>
       <strong id="fatherName"></strong>
     </div>
 
@@ -857,113 +906,41 @@
       <label>Category</label>
       <strong id="category"></strong>
     </div>
+
+    <div class="detail">
+      <label>Address</label>
+      <strong id="recordAddress"></strong>
+    </div>
   </article>
 </main>
 
 <script>
-/* RECORDS DATA */
-const records = {
-  "UP664033011784": {
-    licence: "UP664033011784",
-    name: "Balaji Subramaniyan",
-    father: "Subramaniyan",
-    dateOfBirth: "17 March 1990",
-    firstIssue: "19 June 2019",
-    issueRenewal: "19 June 2019",
-    category: "Motor CYCLE+Motor CAR/JEEP ONLY",
-    expiry: "18 June 2029"
-  },
-  "UP9081726354": {
-    licence: "UP9081726354",
-    name: "Aamir Shah",
-    father: "Naeem Shah",
-    dateOfBirth: "12 June 1994",
-    firstIssue: "20 August 2020",
-    issueRenewal: "20 August 2025",
-    category: "LMV / MCWG",
-    expiry: "19 August 2030"
-  },
-  "UP1831831833": {
-    licence: "UP1831831833",
-    name: "Arshad",
-    father: "Gul Raham",
-    dateOfBirth: "10 October 2001",
-    firstIssue: "11/2000",
-    issueRenewal: "11/2000",
-    category: "Car",
-    expiry: "26 August 2728"
-  },
-  "UP1831831834": {
-    licence: "UP1831831834",
-    name: "samood",
-    father: "Gul Raham",
-    dateOfBirth: "10 October 2001",
-    firstIssue: "11/2000",
-    issueRenewal: "11/2000",
-    category: "Car",
-    expiry: "26 August 2728"
-  },
-  "UP1831831835": {
-    licence: "UP1831831835",
-    name: "samood",
-    father: "Gul Raham",
-    dateOfBirth: "10 October 2001",
-    firstIssue: "11/2000",
-    issueRenewal: "11/2000",
-    category: "Car",
-    expiry: "26 August 2728"
-  },
-  "UP1831831838": {
-    licence: "UP1831831838",
-    name: "adil",
-    father: "adil Raham",
-    dateOfBirth: "10 October 2001",
-    firstIssue: "11/2000",
-    issueRenewal: "11/2000",
-    category: "Car",
-    expiry: "26 August 2728"
-  },
-  "UP1831831839": {
-    licence: "UP1831831839",
-    name: "zeeshan ullah",
+/* PAKISTANI RECORDS DATA (Searchable by both Licence Number and CNIC Number) */
+const recordsList = [
+  {
+    licence: "1110203937455",
+    cnic: "1110203937455",
+    name: "Zeeshan Ullah",
     father: "Zer Ali Khan",
-    dateOfBirth: "15 June 2006",
-    firstIssue: "11/2000",
-    issueRenewal: "11/2000",
-    category: "Car",
-    expiry: "26 August 2728"
-  },
-  "UP10676109287": {
-    licence: "UP10676109287",
-    name: "Harsh Kumar",
-    father: "Yamuna Dass",
-    dateOfBirth: "7 October 1984",
-    firstIssue: "16/09/2018",
-    issueRenewal: "16/09/2018",
-    category: "Car",
-    expiry: "15 September 2028"
-  },
-  "UP10676109288": {
-    licence: "UP10676109288",
-    name: "Wajid Kumar",
-    father: "Noor Alam Kumar",
-    dateOfBirth: "7 October 1984",
-    firstIssue: "16/09/2018",
-    issueRenewal: "16/09/2018",
-    category: "Car",
-    expiry: "15 September 2028"
-  },
-  "UP126981271680": {
-    licence: "UP126981271680",
-    name: "Shailendra Yadav",
-    father: "Ramlakshan Yadav",
-    dateOfBirth: "7 March 2000",
-    firstIssue: "15 May 2019",
-    issueRenewal: "15 May 2019",
-    category: "Motor Car + Motor Cycle/jeep only",
-    expiry: "14 May 2028"
+    dateOfBirth: "15-06-2006",
+    firstIssue: "12-06-2006",
+    issueRenewal: "12-06-2006",
+    expiry: "12-06-2006",
+    category: "M.CYCLE+M,CAR/JEEP ONLY",
+    address: "Kotka Alam Khan Domel"
   }
-};
+];
+
+/* Index records by both Licence Number and CNIC Number */
+const recordsByKey = {};
+recordsList.forEach((item) => {
+  if (item.licence) {
+    recordsByKey[cleanNumber(item.licence)] = item;
+  }
+  if (item.cnic) {
+    recordsByKey[cleanNumber(item.cnic)] = item;
+  }
+});
 
 /* ELEMENT SELECTORS */
 const menuBtn = document.getElementById("menuBtn");
@@ -973,9 +950,13 @@ const homeLink = document.getElementById("homeLink");
 const loginLink = document.getElementById("loginLink");
 const searchForm = document.getElementById("searchForm");
 const licenceInput = document.getElementById("licenceInput");
+const homeSearchBtn = document.getElementById("homeSearchBtn");
+const searchLoading = document.getElementById("searchLoading");
 const searchError = document.getElementById("searchError");
 const resultSearchForm = document.getElementById("resultSearchForm");
 const resultInput = document.getElementById("resultInput");
+const resultSearchBtn = document.getElementById("resultSearchBtn");
+const resultSearchLoading = document.getElementById("resultSearchLoading");
 const resultSearchError = document.getElementById("resultSearchError");
 const resultBanner = document.getElementById("resultBanner");
 const loginPage = document.getElementById("loginPage");
@@ -984,6 +965,8 @@ const adminPassword = document.getElementById("adminPassword");
 const showPassword = document.getElementById("showPassword");
 const adminLoginForm = document.getElementById("adminLoginForm");
 const loginStatus = document.getElementById("loginStatus");
+
+let searchTimer = null;
 
 /* Strip dashes while preserving cursor position */
 function stripDashesPreservingCursor(inputEl) {
@@ -1006,18 +989,23 @@ function stripDashesPreservingCursor(inputEl) {
 licenceInput.addEventListener("input", () => stripDashesPreservingCursor(licenceInput));
 resultInput.addEventListener("input", () => stripDashesPreservingCursor(resultInput));
 
-function hideErrors() {
+function hideStatusMessages() {
   searchError.classList.remove("show");
   searchError.textContent = "";
   resultSearchError.classList.remove("show");
   resultSearchError.textContent = "";
+  searchLoading.classList.remove("show");
+  resultSearchLoading.classList.remove("show");
+  homeSearchBtn.disabled = false;
+  resultSearchBtn.disabled = false;
 }
 
 /* FUNCTION TO GO BACK TO MAIN HOME SCREEN */
 function goToHomeScreen(event) {
   if (event) event.preventDefault();
+  if (searchTimer) clearTimeout(searchTimer);
   document.body.classList.remove("menu-open", "login-view", "results-view");
-  hideErrors();
+  hideStatusMessages();
   licenceInput.value = "";
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
@@ -1041,6 +1029,8 @@ homeLink.addEventListener("click", goToHomeScreen);
 
 loginLink.addEventListener("click", (event) => {
   event.preventDefault();
+  if (searchTimer) clearTimeout(searchTimer);
+  hideStatusMessages();
   document.body.classList.remove("menu-open", "results-view");
   document.body.classList.add("login-view");
   loginStatus.classList.remove("show");
@@ -1086,10 +1076,38 @@ function showError(targetEl, message) {
   targetEl.classList.add("show");
 }
 
-/* SEARCH LOGIC */
-function searchLicence(value, errorTarget = searchError) {
+function renderRecord(record, searchedValue) {
+  document.getElementById("licenceNumber").textContent = record.licence;
+  document.getElementById("cnicNumber").textContent = record.cnic || "N/A";
+  document.getElementById("recordName").textContent = record.name;
+  document.getElementById("fatherName").textContent = record.father;
+  document.getElementById("dateOfBirth").textContent = record.dateOfBirth;
+  document.getElementById("firstIssue").textContent = record.firstIssue;
+  document.getElementById("issueRenewal").textContent = record.issueRenewal;
+  document.getElementById("validUntil").textContent = record.expiry;
+  document.getElementById("category").textContent = record.category;
+  document.getElementById("recordAddress").textContent = record.address || "N/A";
+
+  resultInput.value = cleanNumber(searchedValue) || record.licence;
+
+  document.body.classList.remove("login-view", "menu-open");
+  document.body.classList.add("results-view");
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/* SEARCH LOGIC WITH LOADING STATE */
+function searchLicence(value, options = {}) {
+  const {
+    errorTarget = searchError,
+    loadingTarget = searchLoading,
+    buttonTarget = homeSearchBtn,
+    instant = false
+  } = options;
+
   const key = cleanNumber(value);
-  hideErrors();
+  if (searchTimer) clearTimeout(searchTimer);
+  hideStatusMessages();
 
   if (!key) {
     showError(errorTarget, "Please enter a licence or CNIC number.");
@@ -1101,47 +1119,61 @@ function searchLicence(value, errorTarget = searchError) {
     return false;
   }
 
-  const record = records[key];
+  const executeLookup = () => {
+    loadingTarget.classList.remove("show");
+    buttonTarget.disabled = false;
 
-  if (!record) {
-    showError(errorTarget, "Record not found.");
-    return false;
+    const record = recordsByKey[key];
+    if (!record) {
+      showError(errorTarget, "Record not found.");
+      return false;
+    }
+
+    renderRecord(record, key);
+    return true;
+  };
+
+  if (instant) {
+    return executeLookup();
   }
 
-  document.getElementById("licenceNumber").textContent = record.licence;
-  document.getElementById("recordName").textContent = record.name;
-  document.getElementById("fatherName").textContent = record.father;
-  document.getElementById("dateOfBirth").textContent = record.dateOfBirth;
-  document.getElementById("firstIssue").textContent = record.firstIssue;
-  document.getElementById("issueRenewal").textContent = record.issueRenewal;
-  document.getElementById("validUntil").textContent = record.expiry;
-  document.getElementById("category").textContent = record.category;
+  buttonTarget.disabled = true;
+  loadingTarget.classList.add("show");
 
-  resultInput.value = record.licence;
-
-  document.body.classList.remove("login-view", "menu-open");
-  document.body.classList.add("results-view");
-
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  searchTimer = setTimeout(executeLookup, 900);
   return true;
 }
 
 /* SEARCH HANDLERS */
 searchForm.addEventListener("submit", (event) => {
   event.preventDefault();
-  searchLicence(licenceInput.value, searchError);
+  searchLicence(licenceInput.value, {
+    errorTarget: searchError,
+    loadingTarget: searchLoading,
+    buttonTarget: homeSearchBtn
+  });
 });
 
 resultSearchForm.addEventListener("submit", (event) => {
   event.preventDefault();
-  searchLicence(resultInput.value, resultSearchError);
+  searchLicence(resultInput.value, {
+    errorTarget: resultSearchError,
+    loadingTarget: resultSearchLoading,
+    buttonTarget: resultSearchBtn
+  });
 });
 
-/* URL PARAMETER */
-const fromUrl = new URLSearchParams(window.location.search).get("licence");
+/* URL PARAMETER (?licence= or ?cnic=) */
+const urlParams = new URLSearchParams(window.location.search);
+const fromUrl = urlParams.get("licence") || urlParams.get("cnic");
 if (fromUrl) {
   licenceInput.value = fromUrl.replace(/-/g, "");
-  searchLicence(fromUrl, searchError);
+  searchLicence(fromUrl, {
+    errorTarget: searchError,
+    loadingTarget: searchLoading,
+    buttonTarget: homeSearchBtn,
+    instant: true
+  });
   history.replaceState(null, "", window.location.pathname);
 }
 </script>
