@@ -446,23 +446,11 @@
       display: block;
     }
 
-    .login-status.success {
-      background: #dcfce7;
-      border-color: #86efac;
-      color: #166534;
-    }
-
-    .login-status.error {
-      background: #fee2e2;
-      border-color: #fca5a5;
-      color: #991b1b;
-    }
-
-    /* LOGIN & UPLOAD PAGE */
+    /* LOGIN PAGE */
     .login-page {
       display: none;
       min-height: 100vh;
-      padding: 40px 20px;
+      padding: 25px;
       align-items: center;
       justify-content: center;
     }
@@ -477,60 +465,46 @@
     }
 
     .login-box {
-      width: min(100%, 520px);
-      background: rgba(255, 255, 255, 0.97);
-      padding: 34px 28px;
+      width: min(100%, 460px);
+      background: rgba(255, 255, 255, 0.96);
+      padding: 38px 32px;
       border-radius: 12px;
       border-top: 4px solid var(--color-gold-accent);
       box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
     }
 
     .login-box h2 {
-      margin: 0 0 22px;
+      margin: 0 0 28px;
       color: var(--color-dark-navy);
       text-align: center;
-      font-size: 26px;
+      font-size: 28px;
       line-height: 1.2;
       font-weight: 800;
       letter-spacing: -0.4px;
     }
 
-    .upload-divider {
-      margin: 26px 0 18px;
-      padding-top: 20px;
-      border-top: 1px solid #e2e8f0;
-    }
-
-    .upload-divider h3 {
-      margin: 0 0 16px;
-      color: var(--color-dark-navy);
-      font-size: 19px;
-      font-weight: 800;
-      text-align: center;
-    }
-
     .login-field {
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
 
     .login-field label {
       display: block;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       color: #334155;
-      font-size: 14px;
+      font-size: 14.5px;
       font-weight: 600;
     }
 
     .login-field input {
       width: 100%;
-      height: 46px;
-      padding: 0 14px;
+      height: 50px;
+      padding: 0 16px;
       border: 1.5px solid #cbd5e1;
       border-radius: 8px;
       outline: none;
       background: #ffffff;
       color: #0f172a;
-      font-size: 14.5px;
+      font-size: 15px;
       transition: border-color .15s ease;
     }
 
@@ -571,18 +545,18 @@
 
     .admin-login-btn {
       width: 100%;
-      height: 48px;
-      margin-top: 6px;
+      height: 50px;
+      margin-top: 8px;
       border: 0;
       border-radius: 8px;
       background: var(--color-btn-green);
       color: #ffffff;
-      font-size: 15.5px;
+      font-size: 16px;
       font-weight: 700;
       transition: background .15s ease;
     }
 
-    .admin-login-btn:hover:not(:disabled) {
+    .admin-login-btn:hover {
       background: var(--color-btn-green-hover);
     }
 
@@ -750,7 +724,7 @@
           <path d="M4.5 21v-2.5c0-4 3.2-6.5 7.5-6.5s7.5 2.5 7.5 6.5V21h-15Z"/>
         </svg>
       </span>
-      <span>Login / Upload</span>
+      <span>Login</span>
     </a>
   </nav>
 </aside>
@@ -830,10 +804,10 @@
   </section>
 </main>
 
-<!-- LOGIN & UPLOAD PAGE VIEW -->
+<!-- LOGIN PAGE VIEW -->
 <main class="login-page" id="loginPage">
   <section class="login-box">
-    <h2>Admin Portal & Record Upload</h2>
+    <h2>Welcome Back Admin 👋</h2>
 
     <form id="adminLoginForm">
       <div class="login-field">
@@ -857,65 +831,6 @@
       <button type="submit" class="admin-login-btn">Login</button>
       <div class="login-status" id="loginStatus" role="status" aria-live="polite"></div>
     </form>
-
-    <!-- UPLOAD RECORD FORM TO SUPABASE -->
-    <div class="upload-divider">
-      <h3>Upload New Record to Supabase</h3>
-      <form id="uploadRecordForm">
-        <div class="login-field">
-          <label for="upLicence">Licence Number</label>
-          <input type="text" id="upLicence" placeholder="e.g. 1110203937455">
-        </div>
-
-        <div class="login-field">
-          <label for="upCnic">CNIC Number (Without Dash)</label>
-          <input type="text" id="upCnic" placeholder="e.g. 1110203937455" required>
-        </div>
-
-        <div class="login-field">
-          <label for="upName">Name</label>
-          <input type="text" id="upName" placeholder="e.g. Zeeshan Ullah" required>
-        </div>
-
-        <div class="login-field">
-          <label for="upFather">Father Name</label>
-          <input type="text" id="upFather" placeholder="e.g. Zer Ali Khan">
-        </div>
-
-        <div class="login-field">
-          <label for="upDob">Date of Birth</label>
-          <input type="text" id="upDob" placeholder="e.g. 15-06-2006">
-        </div>
-
-        <div class="login-field">
-          <label for="upFirstIssue">First Issue</label>
-          <input type="text" id="upFirstIssue" placeholder="e.g. 12-06-2006">
-        </div>
-
-        <div class="login-field">
-          <label for="upIssueRenewal">Issue / Renewal</label>
-          <input type="text" id="upIssueRenewal" placeholder="e.g. 12-06-2006">
-        </div>
-
-        <div class="login-field">
-          <label for="upExpiry">Validity / Expiry</label>
-          <input type="text" id="upExpiry" placeholder="e.g. 12-06-2006">
-        </div>
-
-        <div class="login-field">
-          <label for="upCategory">Category</label>
-          <input type="text" id="upCategory" placeholder="e.g. M.CYCLE+M,CAR/JEEP ONLY">
-        </div>
-
-        <div class="login-field">
-          <label for="upAddress">Address</label>
-          <input type="text" id="upAddress" placeholder="e.g. Kotka Alam Khan Domel">
-        </div>
-
-        <button type="submit" id="uploadBtn" class="admin-login-btn">Upload Record</button>
-        <div class="login-status" id="uploadStatus" role="status" aria-live="polite"></div>
-      </form>
-    </div>
   </section>
 </main>
 
@@ -963,7 +878,7 @@
     </div>
 
     <div class="detail">
-      <label>Father Name</label>
+      <label>Father name</label>
       <strong id="fatherName"></strong>
     </div>
 
@@ -1002,12 +917,14 @@
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
+/* SUPABASE CONNECTION */
 const SUPABASE_URL = "https://bafxfqxemldrgxeuzlob.supabase.co";
 const SUPABASE_KEY = "sb_publishable_YzJLRL3jMxixiKjfT9DdwA_WHCUP1Jd";
 const TABLE_NAME = "records";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
+/* ELEMENT SELECTORS */
 const menuBtn = document.getElementById("menuBtn");
 const closeMenu = document.getElementById("closeMenu");
 const menuOverlay = document.getElementById("menuOverlay");
@@ -1030,10 +947,8 @@ const adminPassword = document.getElementById("adminPassword");
 const showPassword = document.getElementById("showPassword");
 const adminLoginForm = document.getElementById("adminLoginForm");
 const loginStatus = document.getElementById("loginStatus");
-const uploadRecordForm = document.getElementById("uploadRecordForm");
-const uploadBtn = document.getElementById("uploadBtn");
-const uploadStatus = document.getElementById("uploadStatus");
 
+/* Strip dashes while preserving cursor position */
 function stripDashesPreservingCursor(inputEl) {
   const start = inputEl.selectionStart ?? inputEl.value.length;
   const end = inputEl.selectionEnd ?? inputEl.value.length;
@@ -1065,6 +980,7 @@ function hideStatusMessages() {
   resultSearchBtn.disabled = false;
 }
 
+/* FUNCTION TO GO BACK TO MAIN HOME SCREEN */
 function goToHomeScreen(event) {
   if (event) event.preventDefault();
   document.body.classList.remove("menu-open", "login-view", "results-view");
@@ -1073,6 +989,7 @@ function goToHomeScreen(event) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+/* MENU EVENTS */
 menuBtn.addEventListener("click", (e) => {
   e.stopPropagation();
   document.body.classList.add("menu-open");
@@ -1086,6 +1003,7 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
+/* NAVIGATION */
 homeLink.addEventListener("click", goToHomeScreen);
 
 loginLink.addEventListener("click", (event) => {
@@ -1094,10 +1012,10 @@ loginLink.addEventListener("click", (event) => {
   document.body.classList.remove("menu-open", "results-view");
   document.body.classList.add("login-view");
   loginStatus.classList.remove("show");
-  uploadStatus.classList.remove("show");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
+/* CLICK BANNER OR EMPTY SCREEN TO RETURN TO MAIN SCREEN */
 resultBanner.addEventListener("click", goToHomeScreen);
 
 loginPage.addEventListener("click", (event) => {
@@ -1112,84 +1030,21 @@ document.body.addEventListener("click", (event) => {
   }
 });
 
+/* PASSWORD TOGGLE */
 showPassword.addEventListener("click", () => {
   const isHidden = adminPassword.type === "password";
   adminPassword.type = isHidden ? "text" : "password";
   showPassword.setAttribute("aria-label", isHidden ? "Hide password" : "Show password");
 });
 
-adminLoginForm.addEventListener("submit", async (e) => {
+adminLoginForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const emailVal = adminEmail.value.trim();
-  const passwordVal = adminPassword.value;
-
-  loginStatus.className = "login-status show";
-  loginStatus.textContent = "Signing in...";
-
-  const { error } = await supabase.auth.signInWithPassword({
-    email: emailVal,
-    password: passwordVal
-  });
-
-  if (error) {
-    loginStatus.className = "login-status show error";
-    loginStatus.textContent = "Login failed: " + error.message;
-    return;
-  }
-
-  loginStatus.className = "login-status show success";
-  loginStatus.textContent = "Logged in successfully! You can now upload records.";
+  loginStatus.textContent = `Login request received for ${emailVal}. Connect a backend auth API for live admin access.`;
+  loginStatus.classList.add("show");
 });
 
-uploadRecordForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const cleanCnic = cleanNumber(document.getElementById("upCnic").value);
-  const cleanLic = cleanNumber(document.getElementById("upLicence").value) || cleanCnic;
-
-  if (!cleanCnic) {
-    uploadStatus.className = "login-status show error";
-    uploadStatus.textContent = "Please enter CNIC number.";
-    return;
-  }
-
-  uploadBtn.disabled = true;
-  uploadStatus.className = "login-status show";
-  uploadStatus.textContent = "Uploading record to Supabase...";
-
-  const newRow = {
-    licence: cleanLic,
-    cnic: cleanCnic,
-    name: document.getElementById("upName").value.trim(),
-    father: document.getElementById("upFather").value.trim(),
-    date_of_birth: document.getElementById("upDob").value.trim(),
-    first_issue: document.getElementById("upFirstIssue").value.trim(),
-    issue_renewal: document.getElementById("upIssueRenewal").value.trim(),
-    expiry: document.getElementById("upExpiry").value.trim(),
-    category: document.getElementById("upCategory").value.trim(),
-    address: document.getElementById("upAddress").value.trim()
-  };
-
-  const { data, error } = await supabase
-    .from(TABLE_NAME)
-    .insert([newRow])
-    .select();
-
-  uploadBtn.disabled = false;
-
-  if (error) {
-    console.error("Supabase Insert Error:", error);
-    uploadStatus.className = "login-status show error";
-    uploadStatus.textContent = "Upload error: " + error.message;
-    return;
-  }
-
-  console.log("Inserted into Supabase:", data);
-  uploadRecordForm.reset();
-  uploadStatus.className = "login-status show success";
-  uploadStatus.textContent = "Uploaded to Supabase! CNIC: " + cleanCnic;
-});
-
+/* UTILITY */
 function cleanNumber(value) {
   return String(value || "").trim().replace(/[\s-]/g, "").toUpperCase();
 }
@@ -1219,6 +1074,7 @@ function renderRecord(record, searchedValue) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+/* FETCH RECORD FROM SUPABASE */
 async function fetchRecordFromSupabase(key) {
   const { data, error } = await supabase
     .from(TABLE_NAME)
@@ -1228,13 +1084,13 @@ async function fetchRecordFromSupabase(key) {
     .limit(1);
 
   if (error) {
-    console.error("Supabase Select Error:", error);
     throw new Error(error.message);
   }
 
   return data && data.length > 0 ? data[0] : null;
 }
 
+/* SEARCH LOGIC */
 async function searchLicence(value, options = {}) {
   const {
     errorTarget = searchError,
@@ -1278,6 +1134,7 @@ async function searchLicence(value, options = {}) {
   }
 }
 
+/* SEARCH HANDLERS */
 searchForm.addEventListener("submit", (event) => {
   event.preventDefault();
   searchLicence(licenceInput.value, {
@@ -1296,6 +1153,7 @@ resultSearchForm.addEventListener("submit", (event) => {
   });
 });
 
+/* URL PARAMETER (?licence= or ?cnic=) */
 const urlParams = new URLSearchParams(window.location.search);
 const fromUrl = urlParams.get("licence") || urlParams.get("cnic");
 if (fromUrl) {
