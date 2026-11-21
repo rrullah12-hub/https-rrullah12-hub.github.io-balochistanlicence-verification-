@@ -446,11 +446,23 @@
       display: block;
     }
 
-    /* LOGIN PAGE */
+    .login-status.success {
+      background: #dcfce7;
+      border-color: #86efac;
+      color: #166534;
+    }
+
+    .login-status.error {
+      background: #fee2e2;
+      border-color: #fca5a5;
+      color: #991b1b;
+    }
+
+    /* LOGIN & UPLOAD PAGE */
     .login-page {
       display: none;
       min-height: 100vh;
-      padding: 25px;
+      padding: 40px 20px;
       align-items: center;
       justify-content: center;
     }
@@ -465,46 +477,60 @@
     }
 
     .login-box {
-      width: min(100%, 460px);
-      background: rgba(255, 255, 255, 0.96);
-      padding: 38px 32px;
+      width: min(100%, 520px);
+      background: rgba(255, 255, 255, 0.97);
+      padding: 34px 28px;
       border-radius: 12px;
       border-top: 4px solid var(--color-gold-accent);
       box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
     }
 
     .login-box h2 {
-      margin: 0 0 28px;
+      margin: 0 0 22px;
       color: var(--color-dark-navy);
       text-align: center;
-      font-size: 28px;
+      font-size: 26px;
       line-height: 1.2;
       font-weight: 800;
       letter-spacing: -0.4px;
     }
 
+    .upload-divider {
+      margin: 26px 0 18px;
+      padding-top: 20px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .upload-divider h3 {
+      margin: 0 0 16px;
+      color: var(--color-dark-navy);
+      font-size: 19px;
+      font-weight: 800;
+      text-align: center;
+    }
+
     .login-field {
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .login-field label {
       display: block;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       color: #334155;
-      font-size: 14.5px;
+      font-size: 14px;
       font-weight: 600;
     }
 
     .login-field input {
       width: 100%;
-      height: 50px;
-      padding: 0 16px;
+      height: 46px;
+      padding: 0 14px;
       border: 1.5px solid #cbd5e1;
       border-radius: 8px;
       outline: none;
       background: #ffffff;
       color: #0f172a;
-      font-size: 15px;
+      font-size: 14.5px;
       transition: border-color .15s ease;
     }
 
@@ -545,18 +571,18 @@
 
     .admin-login-btn {
       width: 100%;
-      height: 50px;
-      margin-top: 8px;
+      height: 48px;
+      margin-top: 6px;
       border: 0;
       border-radius: 8px;
       background: var(--color-btn-green);
       color: #ffffff;
-      font-size: 16px;
+      font-size: 15.5px;
       font-weight: 700;
       transition: background .15s ease;
     }
 
-    .admin-login-btn:hover {
+    .admin-login-btn:hover:not(:disabled) {
       background: var(--color-btn-green-hover);
     }
 
@@ -724,7 +750,7 @@
           <path d="M4.5 21v-2.5c0-4 3.2-6.5 7.5-6.5s7.5 2.5 7.5 6.5V21h-15Z"/>
         </svg>
       </span>
-      <span>Login</span>
+      <span>Login / Upload</span>
     </a>
   </nav>
 </aside>
@@ -804,10 +830,10 @@
   </section>
 </main>
 
-<!-- LOGIN PAGE VIEW -->
+<!-- LOGIN & UPLOAD PAGE VIEW -->
 <main class="login-page" id="loginPage">
   <section class="login-box">
-    <h2>Welcome Back Admin 👋</h2>
+    <h2>Admin Portal & Record Upload</h2>
 
     <form id="adminLoginForm">
       <div class="login-field">
@@ -831,6 +857,65 @@
       <button type="submit" class="admin-login-btn">Login</button>
       <div class="login-status" id="loginStatus" role="status" aria-live="polite"></div>
     </form>
+
+    <!-- UPLOAD RECORD FORM TO SUPABASE -->
+    <div class="upload-divider">
+      <h3>Upload New Record to Supabase</h3>
+      <form id="uploadRecordForm">
+        <div class="login-field">
+          <label for="upLicence">Licence Number</label>
+          <input type="text" id="upLicence" placeholder="e.g. 1110203937455">
+        </div>
+
+        <div class="login-field">
+          <label for="upCnic">CNIC Number (Without Dash)</label>
+          <input type="text" id="upCnic" placeholder="e.g. 1110203937455" required>
+        </div>
+
+        <div class="login-field">
+          <label for="upName">Name</label>
+          <input type="text" id="upName" placeholder="e.g. Zeeshan Ullah" required>
+        </div>
+
+        <div class="login-field">
+          <label for="upFather">Father Name</label>
+          <input type="text" id="upFather" placeholder="e.g. Zer Ali Khan">
+        </div>
+
+        <div class="login-field">
+          <label for="upDob">Date of Birth</label>
+          <input type="text" id="upDob" placeholder="e.g. 15-06-2006">
+        </div>
+
+        <div class="login-field">
+          <label for="upFirstIssue">First Issue</label>
+          <input type="text" id="upFirstIssue" placeholder="e.g. 12-06-2006">
+        </div>
+
+        <div class="login-field">
+          <label for="upIssueRenewal">Issue / Renewal</label>
+          <input type="text" id="upIssueRenewal" placeholder="e.g. 12-06-2006">
+        </div>
+
+        <div class="login-field">
+          <label for="upExpiry">Validity / Expiry</label>
+          <input type="text" id="upExpiry" placeholder="e.g. 12-06-2006">
+        </div>
+
+        <div class="login-field">
+          <label for="upCategory">Category</label>
+          <input type="text" id="upCategory" placeholder="e.g. M.CYCLE+M,CAR/JEEP ONLY">
+        </div>
+
+        <div class="login-field">
+          <label for="upAddress">Address</label>
+          <input type="text" id="upAddress" placeholder="e.g. Kotka Alam Khan Domel">
+        </div>
+
+        <button type="submit" id="uploadBtn" class="admin-login-btn">Upload Record</button>
+        <div class="login-status" id="uploadStatus" role="status" aria-live="polite"></div>
+      </form>
+    </div>
   </section>
 </main>
 
@@ -914,35 +999,15 @@
   </article>
 </main>
 
-<script>
-/* PAKISTANI RECORDS DATA (Searchable by both Licence Number and CNIC Number) */
-const recordsList = [
-  {
-    licence: "1110203937455",
-    cnic: "1110203937455",
-    name: "Zeeshan Ullah",
-    father: "Zer Ali Khan",
-    dateOfBirth: "15-06-2006",
-    firstIssue: "12-06-2006",
-    issueRenewal: "12-06-2006",
-    expiry: "12-06-2006",
-    category: "M.CYCLE+M,CAR/JEEP ONLY",
-    address: "Kotka Alam Khan Domel"
-  }
-];
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-/* Index records by both Licence Number and CNIC Number */
-const recordsByKey = {};
-recordsList.forEach((item) => {
-  if (item.licence) {
-    recordsByKey[cleanNumber(item.licence)] = item;
-  }
-  if (item.cnic) {
-    recordsByKey[cleanNumber(item.cnic)] = item;
-  }
-});
+const SUPABASE_URL = "https://bafxfqxemldrgxeuzlob.supabase.co";
+const SUPABASE_KEY = "sb_publishable_YzJLRL3jMxixiKjfT9DdwA_WHCUP1Jd";
+const TABLE_NAME = "records";
 
-/* ELEMENT SELECTORS */
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
 const menuBtn = document.getElementById("menuBtn");
 const closeMenu = document.getElementById("closeMenu");
 const menuOverlay = document.getElementById("menuOverlay");
@@ -965,10 +1030,10 @@ const adminPassword = document.getElementById("adminPassword");
 const showPassword = document.getElementById("showPassword");
 const adminLoginForm = document.getElementById("adminLoginForm");
 const loginStatus = document.getElementById("loginStatus");
+const uploadRecordForm = document.getElementById("uploadRecordForm");
+const uploadBtn = document.getElementById("uploadBtn");
+const uploadStatus = document.getElementById("uploadStatus");
 
-let searchTimer = null;
-
-/* Strip dashes while preserving cursor position */
 function stripDashesPreservingCursor(inputEl) {
   const start = inputEl.selectionStart ?? inputEl.value.length;
   const end = inputEl.selectionEnd ?? inputEl.value.length;
@@ -1000,17 +1065,14 @@ function hideStatusMessages() {
   resultSearchBtn.disabled = false;
 }
 
-/* FUNCTION TO GO BACK TO MAIN HOME SCREEN */
 function goToHomeScreen(event) {
   if (event) event.preventDefault();
-  if (searchTimer) clearTimeout(searchTimer);
   document.body.classList.remove("menu-open", "login-view", "results-view");
   hideStatusMessages();
   licenceInput.value = "";
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-/* MENU EVENTS */
 menuBtn.addEventListener("click", (e) => {
   e.stopPropagation();
   document.body.classList.add("menu-open");
@@ -1024,20 +1086,18 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-/* NAVIGATION */
 homeLink.addEventListener("click", goToHomeScreen);
 
 loginLink.addEventListener("click", (event) => {
   event.preventDefault();
-  if (searchTimer) clearTimeout(searchTimer);
   hideStatusMessages();
   document.body.classList.remove("menu-open", "results-view");
   document.body.classList.add("login-view");
   loginStatus.classList.remove("show");
+  uploadStatus.classList.remove("show");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
-/* CLICK BANNER OR EMPTY SCREEN TO RETURN TO MAIN SCREEN */
 resultBanner.addEventListener("click", goToHomeScreen);
 
 loginPage.addEventListener("click", (event) => {
@@ -1052,21 +1112,84 @@ document.body.addEventListener("click", (event) => {
   }
 });
 
-/* PASSWORD TOGGLE */
 showPassword.addEventListener("click", () => {
   const isHidden = adminPassword.type === "password";
   adminPassword.type = isHidden ? "text" : "password";
   showPassword.setAttribute("aria-label", isHidden ? "Hide password" : "Show password");
 });
 
-adminLoginForm.addEventListener("submit", (e) => {
+adminLoginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const emailVal = adminEmail.value.trim();
-  loginStatus.textContent = `Login request received for ${emailVal}. Connect a backend auth API for live admin access.`;
-  loginStatus.classList.add("show");
+  const passwordVal = adminPassword.value;
+
+  loginStatus.className = "login-status show";
+  loginStatus.textContent = "Signing in...";
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email: emailVal,
+    password: passwordVal
+  });
+
+  if (error) {
+    loginStatus.className = "login-status show error";
+    loginStatus.textContent = "Login failed: " + error.message;
+    return;
+  }
+
+  loginStatus.className = "login-status show success";
+  loginStatus.textContent = "Logged in successfully! You can now upload records.";
 });
 
-/* UTILITY */
+uploadRecordForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const cleanCnic = cleanNumber(document.getElementById("upCnic").value);
+  const cleanLic = cleanNumber(document.getElementById("upLicence").value) || cleanCnic;
+
+  if (!cleanCnic) {
+    uploadStatus.className = "login-status show error";
+    uploadStatus.textContent = "Please enter CNIC number.";
+    return;
+  }
+
+  uploadBtn.disabled = true;
+  uploadStatus.className = "login-status show";
+  uploadStatus.textContent = "Uploading record to Supabase...";
+
+  const newRow = {
+    licence: cleanLic,
+    cnic: cleanCnic,
+    name: document.getElementById("upName").value.trim(),
+    father: document.getElementById("upFather").value.trim(),
+    date_of_birth: document.getElementById("upDob").value.trim(),
+    first_issue: document.getElementById("upFirstIssue").value.trim(),
+    issue_renewal: document.getElementById("upIssueRenewal").value.trim(),
+    expiry: document.getElementById("upExpiry").value.trim(),
+    category: document.getElementById("upCategory").value.trim(),
+    address: document.getElementById("upAddress").value.trim()
+  };
+
+  const { data, error } = await supabase
+    .from(TABLE_NAME)
+    .insert([newRow])
+    .select();
+
+  uploadBtn.disabled = false;
+
+  if (error) {
+    console.error("Supabase Insert Error:", error);
+    uploadStatus.className = "login-status show error";
+    uploadStatus.textContent = "Upload error: " + error.message;
+    return;
+  }
+
+  console.log("Inserted into Supabase:", data);
+  uploadRecordForm.reset();
+  uploadStatus.className = "login-status show success";
+  uploadStatus.textContent = "Uploaded to Supabase! CNIC: " + cleanCnic;
+});
+
 function cleanNumber(value) {
   return String(value || "").trim().replace(/[\s-]/g, "").toUpperCase();
 }
@@ -1077,18 +1200,18 @@ function showError(targetEl, message) {
 }
 
 function renderRecord(record, searchedValue) {
-  document.getElementById("licenceNumber").textContent = record.licence;
+  document.getElementById("licenceNumber").textContent = record.licence || record.cnic || "N/A";
   document.getElementById("cnicNumber").textContent = record.cnic || "N/A";
-  document.getElementById("recordName").textContent = record.name;
-  document.getElementById("fatherName").textContent = record.father;
-  document.getElementById("dateOfBirth").textContent = record.dateOfBirth;
-  document.getElementById("firstIssue").textContent = record.firstIssue;
-  document.getElementById("issueRenewal").textContent = record.issueRenewal;
-  document.getElementById("validUntil").textContent = record.expiry;
-  document.getElementById("category").textContent = record.category;
+  document.getElementById("recordName").textContent = record.name || "N/A";
+  document.getElementById("fatherName").textContent = record.father || "N/A";
+  document.getElementById("dateOfBirth").textContent = record.date_of_birth || "N/A";
+  document.getElementById("firstIssue").textContent = record.first_issue || "N/A";
+  document.getElementById("issueRenewal").textContent = record.issue_renewal || "N/A";
+  document.getElementById("validUntil").textContent = record.expiry || "N/A";
+  document.getElementById("category").textContent = record.category || "N/A";
   document.getElementById("recordAddress").textContent = record.address || "N/A";
 
-  resultInput.value = cleanNumber(searchedValue) || record.licence;
+  resultInput.value = cleanNumber(searchedValue) || record.licence || record.cnic || "";
 
   document.body.classList.remove("login-view", "menu-open");
   document.body.classList.add("results-view");
@@ -1096,17 +1219,30 @@ function renderRecord(record, searchedValue) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-/* SEARCH LOGIC WITH LOADING STATE */
-function searchLicence(value, options = {}) {
+async function fetchRecordFromSupabase(key) {
+  const { data, error } = await supabase
+    .from(TABLE_NAME)
+    .select("*")
+    .or(`cnic.ilike.${key},licence.ilike.${key}`)
+    .order("id", { ascending: false })
+    .limit(1);
+
+  if (error) {
+    console.error("Supabase Select Error:", error);
+    throw new Error(error.message);
+  }
+
+  return data && data.length > 0 ? data[0] : null;
+}
+
+async function searchLicence(value, options = {}) {
   const {
     errorTarget = searchError,
     loadingTarget = searchLoading,
-    buttonTarget = homeSearchBtn,
-    instant = false
+    buttonTarget = homeSearchBtn
   } = options;
 
   const key = cleanNumber(value);
-  if (searchTimer) clearTimeout(searchTimer);
   hideStatusMessages();
 
   if (!key) {
@@ -1119,11 +1255,14 @@ function searchLicence(value, options = {}) {
     return false;
   }
 
-  const executeLookup = () => {
+  buttonTarget.disabled = true;
+  loadingTarget.classList.add("show");
+
+  try {
+    const record = await fetchRecordFromSupabase(key);
     loadingTarget.classList.remove("show");
     buttonTarget.disabled = false;
 
-    const record = recordsByKey[key];
     if (!record) {
       showError(errorTarget, "Record not found.");
       return false;
@@ -1131,20 +1270,14 @@ function searchLicence(value, options = {}) {
 
     renderRecord(record, key);
     return true;
-  };
-
-  if (instant) {
-    return executeLookup();
+  } catch (err) {
+    loadingTarget.classList.remove("show");
+    buttonTarget.disabled = false;
+    showError(errorTarget, "Database error: " + err.message);
+    return false;
   }
-
-  buttonTarget.disabled = true;
-  loadingTarget.classList.add("show");
-
-  searchTimer = setTimeout(executeLookup, 900);
-  return true;
 }
 
-/* SEARCH HANDLERS */
 searchForm.addEventListener("submit", (event) => {
   event.preventDefault();
   searchLicence(licenceInput.value, {
@@ -1163,7 +1296,6 @@ resultSearchForm.addEventListener("submit", (event) => {
   });
 });
 
-/* URL PARAMETER (?licence= or ?cnic=) */
 const urlParams = new URLSearchParams(window.location.search);
 const fromUrl = urlParams.get("licence") || urlParams.get("cnic");
 if (fromUrl) {
@@ -1171,8 +1303,7 @@ if (fromUrl) {
   searchLicence(fromUrl, {
     errorTarget: searchError,
     loadingTarget: searchLoading,
-    buttonTarget: homeSearchBtn,
-    instant: true
+    buttonTarget: homeSearchBtn
   });
   history.replaceState(null, "", window.location.pathname);
 }
